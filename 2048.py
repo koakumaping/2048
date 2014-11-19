@@ -1,6 +1,6 @@
 #coding = utf-8
 
-import random
+import random, copy
 
 data = [
     
@@ -23,7 +23,7 @@ class main:
         """Constructor"""
         #super(main, self).__init__(self)
         self.init_display()
-        
+
         if self.x1 == self.x2 and self.y1 == self.y2:
             self.init_display()
             #print 'again'
@@ -56,6 +56,7 @@ class main:
     #----------------------------------------------------------------------
     def init_data(self):
         """在屏幕上的空格子处随机产生一个数字2或者4"""
+
         while True:
             x = random.choice(line_num)
             y = random.choice(line_num)
@@ -65,7 +66,7 @@ class main:
                 break
             else:
                 pass
-        
+    
     #----------------------------------------------------------------------
     def score_sum(self):
         """计算分数，分数为所有格子的数值总和"""
@@ -75,7 +76,7 @@ class main:
                 self.score += data[x][y]
                 if data[x][y] == 2048:
                     print 'You win!'
-                    
+
         print 'score is {0:3}'.format(self.score)
         print '------------------------'
         
@@ -84,6 +85,8 @@ class main:
     #----------------------------------------------------------------------
     def left(self):
         """左移"""
+        
+        global data
         for i in line_num:
             
             for x in range(data[i].count(0)):
@@ -93,7 +96,7 @@ class main:
             #print zeros
             data[i].extend(zeros)
             #print data[i]
-            
+
         for i in line_num:
             for x in line_num:
                 if x == 3:
@@ -103,7 +106,7 @@ class main:
                             data[i][x + 1] = 0
                             #print x
                             break
-                
+    
                 else:
                     if data[i][x] == data[i][x + 1]:
                         if data[i][x] != 0:
@@ -111,21 +114,21 @@ class main:
                             data[i][x + 1] = 0
                             #print x
                             break
-                        
         for i in line_num:
             
             for x in range(data[i].count(0)):
                 data[i].remove(0)
-
+    
             zeros = [0 for x in range(4 - len(data[i]))]
             #print zeros
             data[i].extend(zeros)
             #print data[i]
 
-
     #----------------------------------------------------------------------
     def right(self):
         """右移"""
+        
+        global data
         for i in line_num:
             #print i
             for x in range(data[i].count(0)):
@@ -164,7 +167,6 @@ class main:
             data[i][:0] = zeros
             #print data[i]
 
-            
     #----------------------------------------------------------------------
     def up(self):
         """上移"""
@@ -270,34 +272,55 @@ class main:
         
         while True:
             
+            sign = copy.deepcopy(data)
             ch = raw_input('input:')
             
+            
             if ch == 'w':
+                
                 self.up()
-                self.init_data()
+                
+                if sign != data:
+                    self.init_data()
+                    
                 self.display()
                 self.score_sum()
                 
-            if ch == 's':
+            elif ch == 's':
+                                
                 self.down()
-                self.init_data()
+                                
+                if sign != data:
+                    self.init_data()
+                    
                 self.display()
                 self.score_sum()
                 
-            if ch == 'a':
+            elif ch == 'a':
+                
                 self.left()
-                self.init_data()
+                
+                if sign != data:
+                    self.init_data()
+                    
                 self.display()
                 self.score_sum()
                 
-            if ch == 'd':
+            elif ch == 'd':
+
                 self.right()
-                self.init_data()
+
+                if sign != data:
+                    self.init_data()
+                    
                 self.display()
                 self.score_sum()
                 
-            if ch == 'q':
+            elif ch == 'q':
                 break
+            
+            else:
+                pass
             
 if __name__ == '__main__':
     
